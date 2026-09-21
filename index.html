@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gato Preto Academy — Laboratórios IB/UNESP Rio Claro</title>
+<style>
+  :root{
+    --ink:#16181D;
+    --paper:#EDEAE1;
+    --paper-2:#E2DED2;
+    --moss:#3F4F3A;
+    --moss-light:#5C7255;
+    --amber:#B8862A;
+    --slate:#6B6A63;
+    --line:#CFC9B8;
+    --card-bg:#F7F5EF;
+    --radius:2px;
+    --serif: "Fraunces", "Iowan Old Style", Georgia, serif;
+    --sans: "IBM Plex Sans", -apple-system, Segoe UI, Roboto, sans-serif;
+    --mono: "IBM Plex Mono", "Courier New", monospace;
+  }
+  @font-face{ font-family:"Fraunces"; src:local("Fraunces"); }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.5;
+    min-height:100vh;
+  }
+  a{color:var(--moss);}
+  ::selection{background:var(--amber);color:var(--paper);}
+
+  /* -------- header -------- */
+  header{
+    padding:48px 24px 32px;
+    max-width:1000px;
+    margin:0 auto;
+    border-bottom:1px solid var(--line);
+  }
+  .wordmark{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    margin-bottom:22px;
+  }
+  .logo-lockup{
+    flex:0 0 auto;
+  }
+  .logo-lockup img{
+    display:block;
+    width:56px;
+    height:56px;
+    border-radius:14px;
+    object-fit:cover;
+  }
+  .wordmark h1{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:28px;
+    letter-spacing:-0.01em;
+    margin:0;
+  }
+  .wordmark .dept{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--slate);
+    display:block;
+    margin-top:2px;
+  }
+  header p.lede{
+    font-family:var(--serif);
+    font-size:19px;
+    font-weight:400;
+    max-width:640px;
+    color:#2A2C24;
+    margin:0 0 28px;
+  }
+
+  .search-row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  #search{
+    flex:1 1 280px;
+    padding:13px 16px;
+    font-family:var(--sans);
+    font-size:15px;
+    border:1px solid var(--ink);
+    border-radius:var(--radius);
+    background:var(--card-bg);
+    color:var(--ink);
+  }
+  #search:focus-visible{
+    outline:2px solid var(--amber);
+    outline-offset:1px;
+  }
+  select{
+    padding:13px 14px;
+    font-family:var(--sans);
+    font-size:14px;
+    border:1px solid var(--ink);
+    border-radius:var(--radius);
+    background:var(--card-bg);
+    color:var(--ink);
+  }
+  select:focus-visible{ outline:2px solid var(--amber); outline-offset:1px; }
+
+  .chips{
+    margin-top:14px;
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+  }
+  .chip{
+    font-family:var(--mono);
+    font-size:12px;
+    padding:6px 11px;
+    border:1px solid var(--line);
+    border-radius:20px;
+    background:transparent;
+    color:var(--slate);
+    cursor:pointer;
+  }
+  .chip:hover{ border-color:var(--moss); color:var(--moss); }
+  .chip.active{
+    background:var(--ink);
+    border-color:var(--ink);
+    color:var(--paper);
+  }
+  .chip:focus-visible{ outline:2px solid var(--amber); outline-offset:1px; }
+
+  /* -------- stats panel -------- */
+  .stats-row{
+    max-width:1000px;
+    margin:26px auto 0;
+    padding:0 24px;
+    display:flex;
+    gap:28px;
+    flex-wrap:wrap;
+  }
+  .stat{
+    display:flex;
+    flex-direction:column;
+  }
+  .stat .num{
+    font-family:var(--serif);
+    font-size:26px;
+    font-weight:600;
+    color:var(--ink);
+    line-height:1.1;
+  }
+  .stat .label{
+    font-family:var(--mono);
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    color:var(--slate);
+    margin-top:2px;
+  }
+
+  /* -------- roadmap band -------- */
+  .roadmap-band{
+    max-width:1000px;
+    margin:18px auto 0;
+    padding:0 24px;
+  }
+  .roadmap-band p{
+    font-size:12.5px;
+    color:var(--slate);
+    border-left:2px solid var(--amber);
+    padding:8px 12px;
+    margin:0;
+    background:var(--paper-2);
+    border-radius:0 4px 4px 0;
+  }
+  .roadmap-band strong{ color:var(--ink); }
+
+  /* -------- results meta -------- */
+  .meta-row{
+    max-width:1000px;
+    margin:22px auto 0;
+    padding:0 24px;
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--slate);
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+  }
+
+  /* -------- grid -------- */
+  main{
+    max-width:1000px;
+    margin:0 auto;
+    padding:16px 24px 80px;
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(300px,1fr));
+    gap:16px;
+  }
+
+  .card{
+    background:var(--card-bg);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:20px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    position:relative;
+  }
+  .card-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:10px;
+  }
+  .code{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--slate);
+    background:var(--paper-2);
+    padding:2px 6px;
+    border-radius:2px;
+    white-space:nowrap;
+  }
+  .status{
+    font-family:var(--mono);
+    font-size:10px;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    white-space:nowrap;
+  }
+  .status.ok{ color:var(--moss); }
+  .status.check{ color:var(--amber); }
+
+  .card h2{
+    font-family:var(--serif);
+    font-size:19px;
+    font-weight:600;
+    margin:0;
+    line-height:1.25;
+  }
+  .card .docentes{
+    font-size:13.5px;
+    color:#3A3B34;
+  }
+  .card .area-tag{
+    font-family:var(--mono);
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    color:var(--moss-light);
+  }
+  .card .linha{
+    font-size:13.5px;
+    color:#2A2C24;
+    border-left:2px solid var(--line);
+    padding-left:10px;
+    margin:4px 0 2px;
+  }
+  .kw{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin-top:2px;
+  }
+  .kw span{
+    font-size:11px;
+    background:var(--paper-2);
+    padding:3px 8px;
+    border-radius:20px;
+    color:#4A4A42;
+  }
+  .card-footer{
+    margin-top:auto;
+    padding-top:10px;
+    border-top:1px solid var(--line);
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+    font-size:12.5px;
+  }
+  .card-footer a{ text-decoration:none; }
+  .card-footer a:hover{ text-decoration:underline; }
+  .sala{ color:var(--slate); font-size:12px; }
+  .suggest-fix{
+    font-family:var(--mono);
+    font-size:10.5px;
+    color:var(--slate) !important;
+    text-decoration:underline !important;
+    margin-top:2px;
+  }
+  mark{
+    background:var(--amber);
+    color:var(--ink);
+    padding:0 1px;
+    border-radius:2px;
+  }
+
+  .empty{
+    grid-column:1 / -1;
+    text-align:center;
+    padding:60px 20px;
+    font-family:var(--serif);
+    font-size:17px;
+    color:var(--slate);
+  }
+
+  footer{
+    max-width:1000px;
+    margin:0 auto;
+    padding:24px 24px 60px;
+    font-size:12px;
+    color:var(--slate);
+    border-top:1px solid var(--line);
+  }
+
+  @media (max-width:520px){
+    header{padding:32px 18px 24px;}
+    main{padding:16px 18px 60px;}
+    .meta-row{padding:0 18px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wordmark">
+    <div class="logo-lockup">
+      <img src="data:image/png;base64,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" alt="Logo Gato Preto Academy" width="56" height="56">
+    </div>
+    <div>
+      <h1>Gato Preto Academy</h1>
+    </div>
+  </div>
+  <p class="lede">Catálogo de laboratórios, docentes e linhas de pesquisa do Departamento de Biodiversidade da UNESP – Câmpus de Rio Claro.</p>
+
+  <div class="search-row">
+    <input type="text" id="search" placeholder="Busque por área, palavra-chave, docente ou nome do laboratório…" aria-label="Buscar laboratórios">
+    <select id="areaFilter" aria-label="Filtrar por área">
+      <option value="">Todas as áreas</option>
+    </select>
+  </div>
+  <div class="chips" id="chipRow"></div>
+</header>
+
+<div class="stats-row" id="statsRow"></div>
+
+<div class="roadmap-band">
+  <p><strong>Protótipo atual:</strong> Departamento de Biodiversidade, IB/UNESP Rio Claro. <strong>Próximos passos:</strong> demais departamentos do IB → outras unidades da UNESP.</p>
+</div>
+
+<div class="meta-row">
+  <span id="resultCount">— resultados</span>
+  <span>Última atualização do banco de dados: setembro de 2026</span>
+</div>
+
+<main id="grid"></main>
+
+<footer>
+  Protótipo desenvolvido para o TCC "Gato Preto Academy" — Ciências Biológicas, IB/UNESP Rio Claro. Dados de contato, Lattes e linha de pesquisa obtidos de fontes públicas (página do departamento, Plataforma Lattes e Portal de Docentes UNESP). Entradas marcadas <span style="color:var(--amber)">a confirmar</span> ainda não tiveram a linha de pesquisa validada diretamente no Lattes.
+</footer>
+
+<script>
+const LABS = [
+  {
+    codigo: "4240/9704",
+    nome: "Laboratório de Ecologia e Fisiologia de Peixes — LEcoFish (I e II)",
+    docentes: ["Profa. Dra. Aline Dal'Olio Gomes", "Prof. Dr. Gabriel Lourenço Brejão"],
+    area: "Zoologia / Ecologia Animal",
+    linha: "Ecologia e fisiologia de peixes em ambientes aquáticos continentais; efeitos da urbanização e do uso do solo sobre a qualidade da água e as comunidades de peixes; ciclo reprodutivo e hábitos alimentares.",
+    palavrasChave: ["ecologia de peixes", "fisiologia animal", "ambientes aquáticos", "qualidade da água", "urbanização"],
+    sala: "Sala 04 — II — Prédio da Ecologia (Lab I) · Em frente ao Jacarezário (Lab II)",
+    contatos: [
+      {nome:"Aline", email:"aline.d.gomes@unesp.br", lattes:"http://lattes.cnpq.br/8819118069017566"},
+      {nome:"Gabriel", email:"gabriel.brejao@unesp.br", lattes:"http://lattes.cnpq.br/3213452559149113"}
+    ],
+    verificado: true
+  },
+  {
+    codigo: "9625",
+    nome: "Laboratório de Ecologia Molecular",
+    docentes: ["Profa. Dra. Marina Corrêa Côrtes"],
+    area: "Ecologia / Genética",
+    linha: "Genética espacial e das interações ecológicas; dispersão de sementes e polinização por animais; contribuição de interações planta-animal para a biodiversidade e a restauração de ecossistemas na Mata Atlântica.",
+    palavrasChave: ["ecologia molecular", "dispersão de sementes", "polinização", "genética espacial", "restauração ecológica"],
+    sala: "Sala 03 — II — Prédio da Ecologia",
+    contatos: [
+      {nome:"Marina", email:"marina.cortes@unesp.br", lattes:"http://lattes.cnpq.br/6547567800497624"}
+    ],
+    verificado: true
+  },
+  {
+    codigo: "4303",
+    nome: "Laboratório de Entomologia — LENT (I e II)",
+    docentes: ["Prof. Dr. Claudio José Von Zuben"],
+    area: "Zoologia / Entomologia",
+    linha: "Dinâmica populacional de insetos, modelagem matemática e simulação computacional de processos biológicos, entomologia forense.",
+    palavrasChave: ["entomologia forense", "dinâmica populacional", "modelagem matemática", "Diptera", "ecologia aplicada"],
+    sala: "Sala de Criação — Jacarezário (LENT I) · Sala do Prof. Cláudio — Jacarezário (LENT II)",
+    contatos: [
+      {nome:"Claudio", email:"claudio.jv.zuben@unesp.br", lattes:"http://lattes.cnpq.br/7562851016795381"}
+    ],
+    verificado: true
+  },
+  {
+    codigo: "4222",
+    nome: "Laboratório de Fisiologia Vegetal",
+    docentes: ["Prof. Dr. Gustavo Habermann", "Profa. Dra. Neidiquele Maria Silveira"],
+    area: "Botânica / Fisiologia Vegetal",
+    linha: "Ecofisiologia vegetal, fotossíntese, relações hídricas e estresses hídrico, térmico, por alumínio e fotooxidativo em plantas nativas e cultivadas; fisiologia da germinação de sementes (Habermann). Fisiologia do estresse abiótico e sinalização em plantas (Silveira).",
+    palavrasChave: ["ecofisiologia vegetal", "fotossíntese", "relações hídricas", "estresse abiótico", "germinação de sementes"],
+    sala: "Sala Principal — Prédio da Botânica",
+    contatos: [
+      {nome:"Gustavo", email:"gustavo.habermann@unesp.br", lattes:"http://lattes.cnpq.br/9831073276253765"},
+      {nome:"Neidiquele", email:"neidiquele.silveira@unesp.br", lattes:"http://lattes.cnpq.br/3333007954556870"}
+    ],
+    verificado: true
+  },
+  {
+    codigo: "4229",
+    nome: "Laboratório de Ecologia Espacial e Conservação — LEEC",
+    docentes: ["Prof. Dr. Milton Cezar Ribeiro"],
+    area: "Ecologia / Ecologia de Paisagens",
+    linha: "Modelagem ecológica, princípios de ecologia de paisagens e ecologia espacial aplicados à seleção de áreas prioritárias e a diretrizes para conservação e restauração de ambientes naturais e antropizados.",
+    palavrasChave: ["ecologia de paisagens", "modelagem espacial", "áreas prioritárias", "conservação", "restauração", "SIG"],
+    sala: "Sala 09 — I — Prédio da Ecologia",
+    contatos: [
+      {nome:"Milton", email:"milton.c.ribeiro@unesp.br", lattes:"http://lattes.cnpq.br/4158685235743119"}
+    ],
+    verificado: true
+  },
+  {
+    codigo: "9704/4230",
+    nome: "Guedes Lab",
+    docentes: ["Profa. Dra. Thaís B. Guedes"],
+    area: "Zoologia / Herpetologia",
+    linha: "Biogeografia e evolução da herpetofauna neotropical (anfíbios e répteis); padrões de distribuição de biodiversidade, filogenia e conservação; autora da Lista de Répteis do Brasil.",
+    palavrasChave: ["herpetologia", "biogeografia", "répteis", "anfíbios", "conservação"],
+    sala: "Salas 1 e 2 — Jacarezário · Sala 21-I — Prédio da Ecologia",
+    contatos: [ {nome:"Thaís", email:"thais.guedes-costa@unesp.br"} ],
+    link: "http://www.tbguedes.com", linkLabel: "tbguedes.com",
+    verificado: true
+  },
+  {
+    codigo: null,
+    nome: "Grupo de Estudos em Ecologia e Conservação de Abelhas Silvestres (GEECAS)",
+    docentes: ["Profa. Dra. Maria José de O. Campos"],
+    area: "Zoologia / Entomologia",
+    linha: "Ecologia de comunidades de abelhas (Apoidea) em Cerrado, interações com plantas, fenologia e partição de recursos entre polinizadores.",
+    palavrasChave: ["abelhas silvestres", "Apoidea", "ecologia de comunidades", "Cerrado", "fenologia", "polinização"],
+    sala: "Sala 19 — II — Prédio da Ecologia",
+    contatos: [ {nome:"Maria José", email:"mj.campos@unesp.br", lattes:"http://lattes.cnpq.br/0711275437074965"} ],
+    verificado: true
+  },
+  {
+    codigo: "4243/9689",
+    nome: "Herbário Rioclarense (HRCB)",
+    docentes: ["Prof. Dr. Pedro Luís Rodrigues de Moraes (curador)"],
+    area: "Botânica / Taxonomia Vegetal",
+    linha: "Curadoria do acervo botânico do Herbário Rioclarense; sistemática vegetal com ênfase em taxonomia de Lauraceae.",
+    palavrasChave: ["herbário", "taxonomia vegetal", "Lauraceae", "coleções científicas", "sistemática"],
+    sala: "Sala da curadoria/acervo — Herbário Rioclarense",
+    contatos: [ {nome:"Pedro", email:"pedro.r.moraes@unesp.br", lattes:"http://lattes.cnpq.br/4740607891920449"} ],
+    verificado: true
+  },
+  {
+    codigo: "4221",
+    nome: "Laboratório e-Phenology",
+    docentes: ["Profa. Dra. Leonor Patrícia Cerdeira Morellato", "Prof. Dr. Pedro Joaquim Bergamo"],
+    area: "Botânica / Fenologia",
+    linha: "Fenologia e ecologia temporal de vegetações tropicais; efeitos das mudanças climáticas na época de crescimento e reprodução das plantas; biologia da polinização e dispersão de sementes; rede de monitoramento fenológico com phenocameras e sensoriamento remoto em múltiplos biomas brasileiros.",
+    palavrasChave: ["fenologia", "sensoriamento remoto", "mudanças climáticas", "redes de monitoramento", "polinização"],
+    sala: "Sala e-Phenology/Banco de Dados — Prédio da Botânica",
+    contatos: [
+      {nome:"Patrícia", email:"patricia.morellato@unesp.br", lattes:"http://lattes.cnpq.br/1012217731137451"},
+      {nome:"Pedro", email:"pedro.bergamo@unesp.br", lattes:"http://lattes.cnpq.br/9996095159810861"}
+    ],
+    verificado: true
+  },
+  {
+    codigo: null,
+    nome: "Laboratório de Análise e Síntese em Biodiversidade",
+    docentes: ["Prof. Dr. Tadeu Siqueira"],
+    area: "Ecologia / Macroecologia e Síntese",
+    linha: "Ecologia de metacomunidades, biodiversidade e estabilidade em ecossistemas aquáticos, modelagem estatística e métodos em ecologia aplicada.",
+    palavrasChave: ["metacomunidades", "biodiversidade de água doce", "modelagem estatística", "ecologia aplicada"],
+    sala: "Sala 16 — I — Prédio da Ecologia",
+    contatos: [ {nome:"Tadeu", email:"tadeu.siqueira@unesp.br", lattes:"http://lattes.cnpq.br/3312992120803629"} ],
+    verificado: true
+  },
+  {
+    codigo: null,
+    nome: "Laboratório de Biodiversidade e Sistemática de Insetos (LBSI)",
+    docentes: ["Prof. Dr. Caleb Califre Martins"],
+    area: "Zoologia / Entomologia",
+    linha: "Entomologia, controle biológico, evolução, taxonomia e sistemática de insetos, com ênfase na superordem Neuropterida.",
+    palavrasChave: ["sistemática", "entomologia", "taxonomia", "controle biológico", "Neuropterida"],
+    sala: "Sala 10 — I — Prédio da Ecologia",
+    contatos: [ {nome:"Caleb", email:"caleb.califre@unesp.br", lattes:"http://lattes.cnpq.br/4630790612264183"} ],
+    link: "https://www.instagram.com/lbsi_ib_unesp", linkLabel: "@lbsi_ib_unesp",
+    verificado: true
+  },
+  {
+    codigo: null,
+    nome: "Laboratório de Aracnologia — LARC",
+    docentes: ["Prof. Dr. José Paulo L. Guadanucci"],
+    area: "Zoologia / Aracnologia",
+    linha: "Sistemática, taxonomia, filogenia, morfologia, morfometria e biogeografia de aranhas, com especial interesse em Mygalomorphae (tarântulas e aranhas-de-alçapão).",
+    palavrasChave: ["aracnologia", "Mygalomorphae", "sistemática", "filogenia", "biogeografia"],
+    sala: "Sala 08 — I — Prédio da Ecologia",
+    contatos: [ {nome:"José Paulo", email:"jose.guadanucci@unesp.br", lattes:"http://lattes.cnpq.br/9719525869700761"} ],
+    verificado: true
+  },
+  {
+    codigo: "9624",
+    nome: "Laboratório de Biologia da Conservação — LaBiC",
+    docentes: ["Prof. Dr. Mauro Galetti Rodrigues"],
+    area: "Ecologia / Biologia da Conservação",
+    linha: "Consequências ecológicas e evolutivas da defaunação; interações entre animais frugívoros e plantas; conservação da Mata Atlântica e impactos humanos sobre a fauna.",
+    palavrasChave: ["defaunação", "biologia da conservação", "dispersão de sementes", "Mata Atlântica", "frugivoria"],
+    sala: "Sala 02 — I — Prédio da Ecologia",
+    contatos: [ {nome:"Mauro", email:"mauro.galetti@unesp.br", lattes:"http://lattes.cnpq.br/3431375174670630"} ],
+    verificado: true
+  },
+  {
+    codigo: null,
+    nome: "Laboratório de Ecologia da Vegetação (LEVeg)",
+    docentes: ["Profa. Dra. Alessandra Tomaselli Fidelis"],
+    area: "Botânica / Ecologia da Vegetação",
+    linha: "Ecologia do fogo, distúrbio e ecologia de comunidades campestres e savânicas; dinâmica de biomassa e carbono aéreo e subterrâneo.",
+    palavrasChave: ["ecologia do fogo", "cerrado", "dinâmica de vegetação", "savanas", "distúrbio"],
+    sala: "Lab. Sistemática 1 — Botânica",
+    contatos: [ {nome:"Alessandra", email:"alessandra.fidelis@unesp.br", lattes:"http://lattes.cnpq.br/9816649379632045"} ],
+    verificado: true
+  },
+  {
+    codigo: "4226",
+    nome: "Laboratório de Ecologia de Aves — LECAVE",
+    docentes: ["Prof. Dr. Marco Aurélio Pizo Ferreira"],
+    area: "Zoologia / Ornitologia",
+    linha: "Interação animal-planta envolvendo frugivoria e dispersão de sementes; ecologia e comportamento de aves.",
+    palavrasChave: ["ornitologia", "frugivoria", "dispersão de sementes", "interação animal-planta"],
+    sala: "Sala 18 — I — Prédio da Ecologia",
+    contatos: [ {nome:"Marco", email:"marco.pizo@unesp.br", lattes:"http://lattes.cnpq.br/1663295770796752"} ],
+    verificado: true
+  },
+  {
+    codigo: "9626",
+    nome: "Laboratório de Ecologia, Funcionamento e Conservação de Plantas — LabPlanta",
+    docentes: ["Profa. Dra. Thaise Emilio Lopes de Sousa"],
+    area: "Botânica / Ecologia Vegetal",
+    linha: "Ecologia funcional e distribuição geográfica de plantas; funcionamento de ecossistemas tropicais, dinâmica de florestas, hidráulica de plantas e conservação de palmeiras.",
+    palavrasChave: ["ecologia funcional", "conservação de plantas", "florestas tropicais", "hidráulica de plantas"],
+    sala: "Sala 10 — II — Prédio da Ecologia",
+    contatos: [ {nome:"Thaise", email:"thaise.emilio@unesp.br", lattes:"http://lattes.cnpq.br/6523487758493731"} ],
+    verificado: true
+  },
+  {
+    codigo: "9703",
+    nome: "Laboratório de Ecologia dos Indivíduos — LIND",
+    docentes: ["Prof. Dr. Márcio Silva Araújo"],
+    area: "Ecologia / Ecologia Comportamental",
+    linha: "Ecologia evolutiva, com foco nas origens e consequências da variação ecológica individual; ecologia da predação, morfologia funcional e personalidade animal.",
+    palavrasChave: ["especialização individual", "ecologia evolutiva", "personalidade animal", "morfologia funcional"],
+    sala: "Sala 17 — I — Prédio da Ecologia",
+    contatos: [ {nome:"Márcio", email:"marcio.s.araujo@unesp.br", lattes:"http://lattes.cnpq.br/7283754153457296"} ],
+    verificado: true
+  },
+  {
+    codigo: "4223",
+    nome: "Laboratório de Fenologia",
+    docentes: ["Profa. Dra. Leonor Patrícia Cerdeira Morellato", "Prof. Dr. Pedro Joaquim Bergamo"],
+    area: "Botânica / Fenologia",
+    linha: "Estudo dos ciclos sazonais de plantas (floração, frutificação, brotamento) e sua relação com o clima e a conservação de ecossistemas tropicais.",
+    palavrasChave: ["fenologia", "ecologia vegetal", "ciclos sazonais"],
+    sala: "Prédio da Botânica",
+    contatos: [
+      {nome:"Patrícia", email:"patricia.morellato@unesp.br", lattes:"http://lattes.cnpq.br/1012217731137451"},
+      {nome:"Pedro", email:"pedro.bergamo@unesp.br", lattes:"http://lattes.cnpq.br/9996095159810861"}
+    ],
+    verificado: true
+  },
+  {
+    codigo: null,
+    nome: "Laboratório de Fisiologia Ecológica e Evolutiva",
+    docentes: ["Prof. Dr. Ariovaldo Pereira da Cruz Neto", "Prof. Dr. Denis Otávio Vieira de Andrade"],
+    area: "Zoologia / Fisiologia Animal",
+    linha: "Metabolismo energético de vertebrados (Cruz Neto). Fisiologia animal comparada e ecofisiologia, com ênfase em metabolismo energético, biologia termal e balanço de água em anfíbios e répteis (Andrade).",
+    palavrasChave: ["fisiologia animal comparada", "ecofisiologia", "metabolismo energético", "anfíbios", "répteis"],
+    sala: "Sala 14 — Jacarezário",
+    contatos: [
+      {nome:"Ariovaldo", email:"ap.cruz-neto@unesp.br", lattes:"http://lattes.cnpq.br/5758081094133626"},
+      {nome:"Denis", email:"denis.v.andrade@unesp.br", lattes:"http://lattes.cnpq.br/5742843228249394"}
+    ],
+    verificado: true
+  },
+  {
+    codigo: "4224",
+    nome: "Laboratório de Morfologia Vegetal",
+    docentes: ["Profa. Dra. Alessandra Ike Coan"],
+    area: "Botânica / Morfologia Vegetal",
+    linha: "Micromorfologia, ontogenia e anatomia de órgãos vegetativos e reprodutivos de angiospermas, com ênfase em monocotiledôneas.",
+    palavrasChave: ["morfologia vegetal", "anatomia vegetal", "monocotiledôneas", "angiospermas"],
+    sala: "Sala de Preparo — Prédio da Botânica",
+    contatos: [ {nome:"Alessandra", email:"ike.coan@unesp.br", lattes:"http://lattes.cnpq.br/5838426864167473"} ],
+    verificado: true
+  },
+  {
+    codigo: "9681",
+    nome: "Laboratório de Primatologia — LaP",
+    docentes: ["Profa. Dra. Laurence M. V. Culot"],
+    area: "Zoologia / Primatologia",
+    linha: "Ecologia e conservação de primatas neotropicais; resiliência de primatas na paisagem; papel dos primatas na dispersão de sementes e regeneração florestal; genética da conservação.",
+    palavrasChave: ["primatologia", "dispersão de sementes", "ecologia da paisagem", "conservação"],
+    sala: "Sala 23 — I — Prédio da Ecologia",
+    contatos: [ {nome:"Laurence", email:"laurence.culot@unesp.br", lattes:"http://lattes.cnpq.br/7433933426721415"} ],
+    verificado: true
+  },
+  {
+    codigo: "4218",
+    nome: "Laboratório de Sistemática Vegetal",
+    docentes: ["Prof. Dr. Julio Antonio Lombardi"],
+    area: "Botânica / Sistemática Vegetal",
+    linha: "Taxonomia de Fanerógamos, particularmente das famílias Celastraceae, Oleaceae e Vitaceae, além de estudos florísticos.",
+    palavrasChave: ["sistemática vegetal", "taxonomia", "florística", "Celastraceae", "Vitaceae"],
+    sala: "Sala Principal — Prédio da Botânica",
+    contatos: [ {nome:"Julio", email:"julio.lombardi@unesp.br", lattes:"http://lattes.cnpq.br/3102516580176991"} ],
+    verificado: true
+  }
+];
+
+const grid = document.getElementById('grid');
+const searchInput = document.getElementById('search');
+const areaFilter = document.getElementById('areaFilter');
+const chipRow = document.getElementById('chipRow');
+const resultCount = document.getElementById('resultCount');
+// build area <select>
+[...new Set(LABS.map(l => l.area))].sort().forEach(area => {
+  const opt = document.createElement('option');
+  opt.value = area; opt.textContent = area;
+  areaFilter.appendChild(opt);
+});
+
+// build keyword chips (top keywords)
+const allKw = LABS.flatMap(l => l.palavrasChave);
+const kwCount = {};
+allKw.forEach(k => kwCount[k] = (kwCount[k]||0)+1);
+const topKw = Object.entries(kwCount).sort((a,b)=>b[1]-a[1]).slice(0,10).map(e=>e[0]);
+let activeChip = null;
+topKw.forEach(kw => {
+  const btn = document.createElement('button');
+  btn.className = 'chip';
+  btn.textContent = kw;
+  btn.type = 'button';
+  btn.addEventListener('click', () => {
+    activeChip = activeChip === kw ? null : kw;
+    [...chipRow.children].forEach(c => c.classList.toggle('active', c.textContent === activeChip));
+    render();
+  });
+  chipRow.appendChild(btn);
+});
+
+function matches(lab, query, area, chip){
+  const hay = [lab.nome, lab.area, lab.linha, ...lab.docentes, ...lab.palavrasChave].join(' ').toLowerCase();
+  const q = query.trim().toLowerCase();
+  const qOk = !q || hay.includes(q);
+  const areaOk = !area || lab.area === area;
+  const chipOk = !chip || lab.palavrasChave.includes(chip);
+  return qOk && areaOk && chipOk;
+}
+
+function escapeRegex(str){ return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+
+function highlight(text, query){
+  if(!query || !query.trim()) return text;
+  const q = escapeRegex(query.trim());
+  return text.replace(new RegExp(`(${q})`, 'ig'), '<mark>$1</mark>');
+}
+
+function cardHtml(lab, query){
+  const contatosHtml = lab.contatos.map(c => {
+    const lattesLink = c.lattes ? ` · <a href="${c.lattes}" target="_blank" rel="noopener">Lattes${c.nome ? ' ('+c.nome+')' : ''}</a>` : '';
+    return `<a href="mailto:${c.email}">${c.email}</a>${lattesLink}`;
+  }).join('<br>');
+  const extraHtml = lab.link ? `<br><a href="${lab.link}" target="_blank" rel="noopener">${lab.linkLabel || 'site do laboratório'}</a>` : '';
+
+  const firstEmail = lab.contatos[0] ? lab.contatos[0].email : '';
+  const subject = encodeURIComponent(`Correção de informação — ${lab.nome}`);
+  const body = encodeURIComponent(`Olá! Vi seu laboratório no Gato Preto Academy e gostaria de sugerir uma correção ou atualização na informação exibida.\n\nO que precisa ser corrigido:\n`);
+  const suggestLink = firstEmail ? `<br><a class="suggest-fix" href="mailto:${firstEmail}?subject=${subject}&body=${body}">sugerir correção</a>` : '';
+
+  return `
+  <article class="card">
+    <div class="card-top">
+      ${lab.codigo ? `<span class="code">Ramal ${lab.codigo}</span>` : '<span></span>'}
+      <span class="status ${lab.verificado ? 'ok' : 'check'}">${lab.verificado ? '✓ confirmado' : '⚠ a confirmar'}</span>
+    </div>
+    <h2>${highlight(lab.nome, query)}</h2>
+    <div class="docentes">${highlight(lab.docentes.join(' · '), query)}</div>
+    <div class="area-tag">${highlight(lab.area, query)}</div>
+    <p class="linha">${highlight(lab.linha, query)}</p>
+    <div class="kw">${lab.palavrasChave.map(k => `<span>${highlight(k, query)}</span>`).join('')}</div>
+    <div class="card-footer">
+      <span class="sala">${lab.sala}</span>
+      <span>${contatosHtml}${extraHtml}${suggestLink}</span>
+    </div>
+  </article>`;
+}
+
+function renderStats(){
+  const statsRow = document.getElementById('statsRow');
+  const total = LABS.length;
+  const areas = new Set(LABS.map(l => l.area.split(' / ')[0])).size;
+  const confirmados = LABS.filter(l => l.verificado).length;
+  statsRow.innerHTML = `
+    <div class="stat"><span class="num">${total}</span><span class="label">Laboratórios</span></div>
+    <div class="stat"><span class="num">${areas}</span><span class="label">Grandes áreas</span></div>
+    <div class="stat"><span class="num">${confirmados}/${total}</span><span class="label">Confirmados no Lattes</span></div>
+  `;
+}
+
+function render(){
+  const q = searchInput.value;
+  const area = areaFilter.value;
+  const filtered = LABS.filter(l => matches(l, q, area, activeChip));
+  resultCount.textContent = `${filtered.length} resultado${filtered.length===1?'':'s'}`;
+  grid.innerHTML = filtered.length
+    ? filtered.map(l => cardHtml(l, q)).join('')
+    : `<div class="empty">Nenhum laboratório encontrado com esses termos.<br>Tente uma palavra-chave mais ampla, como "ecologia" ou "conservação".</div>`;
+}
+
+searchInput.addEventListener('input', render);
+areaFilter.addEventListener('change', render);
+renderStats();
+render();
+</script>
+</body>
+</html>
